@@ -12,21 +12,33 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      const res = await axios.get("http://localhost:5000/api/search", {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/search`,
+      {
         params: { q, category, minPrice, maxPrice },
-      });
+      }
+    );
 
-      setProducts(res.data);
-    } catch (err) {
-      setError(err.response?.data?.error || "Something went wrong");
-    } finally {
-      setLoading(false);
+    const data = res.data;
+
+    if (Array.isArray(data)) {
+      setProducts(data);
+    } else if (Array.isArray(data.products)) {
+      setProducts(data.products);
+    } else {
+      setProducts([]);
     }
-  };
+
+  } catch (err) {
+    setError(err.response?.data?.error || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     const delay = setTimeout(() => {
