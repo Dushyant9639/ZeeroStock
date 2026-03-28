@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require("express");
 const connectDB = require("./configs/db");
 
@@ -17,7 +18,7 @@ app.use("/supplier", supplierRoutes);
 app.use("/inventory", inventoryRoutes);
 
 // Server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
